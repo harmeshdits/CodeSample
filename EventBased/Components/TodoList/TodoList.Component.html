@@ -1,0 +1,58 @@
+
+<mat-sidenav-container>    
+  <!-- Todoside Nav-->
+    <mat-sidenav #sidenav mode="side" [(opened)]="opened">
+      <mat-toolbar class="toolbar_bg"> 
+        <h2>Filter</h2>   
+        </mat-toolbar>
+          <mat-selection-list #shoes [multiple]="false">
+            <mat-list-option (click)="setSelectedColor(false)">
+              <span class="list-items" *ngIf="!selectedColor">
+                <mat-icon>check</mat-icon> Show All
+            </span> 
+            </mat-list-option>
+            <mat-list-option *ngFor="let color of colors" [value]="color.id" [style.backgroundColor]="color.colorCode" (click)="setSelectedColor(color.colorCode)">
+            <span class="list-items" *ngIf="color.colorCode == selectedColor">
+                <mat-icon>check</mat-icon> Select
+            </span> 
+            </mat-list-option>
+          </mat-selection-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content>     
+      <!-- Headder-->
+        <mat-toolbar class="toolbar_bg">         
+              <button mat-icon-button (click)="sidenav.toggle()"> <mat-icon>menu</mat-icon> </button>   
+              NOTES
+        </mat-toolbar>
+
+        <!-- Note form -->
+        
+        <div class="col-lg-12 mb notepos">
+              <mat-card style="width: 41%;margin: 0 auto;">                
+                    <mat-form-field class="col-md-12">
+                      <mat-label>Enter your Todo task</mat-label>
+                      <textarea matInput placeholder="Todo task" rows="5" cols="10" [(ngModel)]="note" name="note"></textarea>
+                    </mat-form-field>      
+                    <div class="col-md-12" *ngIf="note && note.length">
+                      <div class="row">
+                        <div class="color_selection" *ngFor="let color of colors" [style.backgroundColor]="color.colorCode" 
+                        style="padding: 20px;"
+                        (click)="SaveToDo(color)">&nbsp;&nbsp;</div>
+                      </div>
+                    </div> 
+              </mat-card>
+        </div>
+
+        <!-- Cards View -->
+        <div style="width: 40%;margin: 0 auto;">
+          <app-todo-presentation 
+            (updateNoteEvent)="UpdateToDoTask($event)"
+            (deleteNoteEvent)="DeleteToDoTask($event)"
+            [toDosList]="storeList$|async" 
+            [filterColor]="selectedColor">
+        </app-todo-presentation>
+        </div>       
+    </mat-sidenav-content>
+
+</mat-sidenav-container>

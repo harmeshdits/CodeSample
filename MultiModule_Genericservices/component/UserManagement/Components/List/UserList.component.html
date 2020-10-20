@@ -1,0 +1,9 @@
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="ball-grid-beat" [fullScreen]="true"
+   template="<img src='assets/images/loader-icon.png' height='100px' width='100px'>">
+   <p style="color: white;margin:10px 0 0 0"> Loading... </p>
+</ngx-spinner>
+
+<app-user-list-presentation [isLoading]="isLoading$|async" [result]="usersData$|async"   (deleteUserEvent)="DeleteUser($event)"  *ngIf="agGridEnable==false"> </app-user-list-presentation>
+<app-grid-list-presentation [isLoading]="isLoading$|async" [result]="usersData$|async" *ngIf="agGridEnable"></app-grid-list-presentation>
+
+

@@ -1,0 +1,41 @@
+<div class="subheader subheader-solid" id="kt_subheader">
+  <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap">
+      <div class="d-flex align-items-center flex-wrap mr-1">
+          <div class="d-flex align-items-baseline flex-wrap mr-5">
+              <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">Admin</h5>
+              <ul class="breadcrumb font-weight-bold p-0 my-2 font-size-sm">
+                  <li class="breadcrumb-item">
+                      <a class="text-muted">User Management</a>
+                  </li>
+              </ul>
+          </div>
+      </div>
+      <div class="d-flex align-items-center mt-10">
+          <button (click)="addNewUser()" mat-raised-button color="primary" matTooltip="Add new user"
+              class="btn-primary">Add
+              User</button>
+      </div>
+  </div>
+</div>
+
+<div class="d-flex flex-column-fluid">
+  <div class="container-fluid pad-4">
+      <kt-portlet>
+          <kt-portlet-body>                
+                <ag-grid-angular
+                  #agGrid
+                  style="width: 100%;height:600px"
+                  class="ag-theme-material"
+                  [defaultColDef]="defaultColDef"
+                  [rowData]="result"
+                  [columnDefs]="columnDefs" 
+                  [frameworkComponents]="frameworkComponents"
+                  [context]="context"              
+                  [animateRows]="true" 
+                  [getMainMenuItems]="getMainMenuItems"
+                  >
+                </ag-grid-angular>
+          </kt-portlet-body>
+      </kt-portlet>
+    </div>
+</div>

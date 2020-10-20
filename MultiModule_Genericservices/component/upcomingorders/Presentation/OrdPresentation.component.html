@@ -1,0 +1,274 @@
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="ball-grid-beat" [fullScreen]="true"
+   template="<img src='assets/images/loader-icon.png' height='100px' width='100px'>">
+   <p style="color: white;margin:10px 0 0 0"> Loading... </p>
+</ngx-spinner>
+<div class="subheader subheader-solid" id="kt_subheader">
+   <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap">
+      <div class="d-flex align-items-center flex-wrap mr-1">
+         <div class="d-flex align-items-baseline flex-wrap mr-5">
+            <ul class="breadcrumb font-weight-bold p-0 my-2 font-size-sm">
+               <li class="breadcrumb-item">
+                  <a routerLink='/crm/db' class="text-muted"> CRM </a>
+               </li>
+               <li class="breadcrumb-item">
+                  <a class="text-muted">Upcoming Orders</a>
+               </li>
+            </ul>
+         </div>
+      </div>
+      <div class="d-flex align-items-baseline flex-wrap ml-auto mr-1">
+         <button routerLink="/crm/neword" mat-raised-button color="primary" matTooltip="Add new order"
+            class="btn-primary addOrdbtn">New
+            Order</button>
+      </div>
+
+
+      <div class="d-flex align-items-center mt-10">
+         <div class="ordertListPage tabSectionCol">
+            <mat-button-toggle-group appearance="legacy" #calend='matButtonToggleGroup'>
+               <mat-button-toggle *ngFor="let type of ordersTypes" (click)="filterOrderStatus(type.id)"
+                  [checked]="upcOrderModel.dayId == type['id']">{{type.name}}</mat-button-toggle>
+            </mat-button-toggle-group>
+         </div>
+      </div>
+   </div>
+</div>
+
+<div class="d-flex flex-column-fluid">
+   <div class="container-fluid pad-4">
+      <kt-portlet>
+         <kt-portlet-body>
+            <div class="tab-content">
+               <div role="tabpanel" class="tab-pane active " id="online">
+                  <div class="orderData">
+                     <div class="container-fluid pad0">
+                        <div class="row">
+                           <div class="col-md-12 col-sm-12">
+                              <div class="thumb">
+                                 <div class="thumbBody">
+                                    <div class="sellingItems">
+                                       <div class="tsiCol" *ngFor="let status of orderStatusData"
+                                          (click)="getOrdersByStatus(status.orderStatusId)"
+                                          [class.selected]="upcOrderModel.selectedOrderSId == status['orderStatusId']"
+                                          [style.backgroundColor]="status.statusColor">
+                                          <i [ngClass]='status.statsIcon' aria-hidden="true"></i>
+                                          {{status.orderStatus}}<span class="proListNumber"><a
+                                                href="javascript:void(0)">{{status.orderCount}}</a></span>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+
+                        <div class="row">
+                           <div class="col-sm-12">
+                              <hr>
+                           </div>
+                        </div>
+
+                        <div class="row">
+                           <div class="col-sm-12">
+                              <div class="row">
+                                 <div class="col-md-12 col-lg-6 col-xl-6">
+                                    <div class="weekGrid table-responsive"
+                                       [perfectScrollbar]="{wheelPropagation: false, suppressScrollX: false}">
+                                       <h4 *ngIf="(ordersList) && ordersList.length < 1">No Orders Found!</h4>
+                                       <table class="table table-hover" id="tableRow">
+                                          <ng-container *ngFor="let order of ordersList; let index=index">
+                                             <thead (click)="collapseRow(index)">
+                                                <tr>
+                                                   <th colspan="3">{{order['orderHeader']}} orders
+                                                      <span class="pull-right">
+                                                         <i *ngIf="upcOrderModel.selectedOrderRow != index"
+                                                            class="fa fa-angle-down"></i> <i
+                                                            *ngIf="upcOrderModel.selectedOrderRow == index"
+                                                            class="fa fa-angle-up"></i>
+                                                      </span>
+                                                   </th>
+                                                </tr>
+                                             </thead>
+                                             <tbody *ngIf="order['ordersJson']" [hidden]="index !== upcOrderModel.selectedOrderRow">
+                                                <ng-container *ngFor="let list of returnJsonObj(order['ordersJson'])">
+                                                   <div class="tableBorder"
+                                                      [class.selectedOrder]="upcOrderModel.selectedOrderId == list.OrderId">
+                                                      <div class="tableDiv">
+                                                         <div class="commonText"><a style="cursor:pointer"
+                                                              [routerLink]="['/crm/clientsm']" [queryParams]="{cId:list.CustomerId}" ><b>{{list.CustomerFirstName}}
+                                                                  {{list.CustomerLastName}}</b> &nbsp; </a>
+                                                         </div>
+                                                         <div class="commonText"> {{list.Ocassion}}</div>
+                                                         <div class="text-right commonText" *ngFor="let status of orderStatusData | orderStatusColor:list.OrderStatus">
+                                                            <span class="text-white"  [style.backgroundColor]="status.statusColor">{{ status.orderStatus}}  </span></div>
+                                                      </div>
+
+                                                      <div class="tableDiv" (click)="getOrderDetail(list.OrderId)"
+                                                         style="cursor: pointer;">
+                                                         <div>
+                                                            <span class="badge badge-primary"
+                                                               *ngFor="let orderDetail of returnJsonObj(list.OrderDetails); let last=last">
+                                                               {{orderDetail.Name}} <span class="value">6</span> </span>
+                                                         </div>
+                                                         <div class="text-right">
+                                                            {{list.ArrangementType}},{{list.StyleOfArrangement}},
+                                                            {{list.MoodOfArrangement}} </div>
+                                                      </div>
+
+                                                      <div class="tableDiv" (click)="getOrderDetail(list.OrderId)"
+                                                         style="cursor: pointer;">
+                                                         <div> <img *ngIf="list.BloomType == 'ArtistChoice'"
+                                                               src="assets/images/pre-configured.png" alt="image"
+                                                               width="20"  title="{{list.BloomType}}"/> </div>
+                                                         <div style="min-width: 200px;">
+                                                            <ng-container *ngIf="list.OrderColors">
+                                                               <span
+                                                                  *ngFor="let color of returnJsonObj(list.OrderColors)"
+                                                                  class="color" title="{{color.ColorValue}}"
+                                                                  [style.backgroundColor]="color.ColorCode"
+                                                                 ></span>
+                                                            </ng-container>
+                                                         </div>
+                                                         <div class="text-right">
+                                                            <span
+                                                               class="bg-secondary text-white">{{list.BloomSize}}</span>
+                                                         </div>
+                                                      </div>
+                                                   </div>
+                                                </ng-container>
+                                             </tbody>
+                                          </ng-container>
+                                       </table>
+                                    </div>
+                                 </div>
+
+                                 <!-- Order Detail component -->
+                                 <div class="col-md-12 col-lg-6 col-xl-6 borderLeft">
+                                    <div class="rightData">
+                                       <h4 *ngIf="!(orederDetail$|async)">No Detail Found!</h4>
+
+                                       <div class="UpcomingData"  [class.orderScheduleTop]="upcOrderModel.recipientInfo" *ngIf="(orederDetail$|async)">                                         
+                                          <ng-container *ngFor="let customer of orederDetail$|async">                                             
+                                             <div class="commonInfo">
+                                                <h5>
+                                                   Recipient Info
+                                                   <button class="btn btn-sm pull-right"
+                                                      (click)="upcOrderModel.recipientInfo = !upcOrderModel.recipientInfo"> 
+                                                      <i [ngClass]="upcOrderModel.recipientInfo ? 'fa fa-angle-up': 'fa fa-angle-down'"></i>
+                                                   </button>
+                                                </h5>
+
+                                                <ng-container *ngIf="upcOrderModel.recipientInfo">
+                                                   <ul *ngIf="customer.isOrderForSelf && customer.customerFirstName">
+                                                      <li><i class="fa fa-user"></i> {{customer.customerFirstName}}
+                                                         {{customer.customerLastName}}</li>
+                                                      <li>  <a   href="mailto:{{customer.customerEmail}}"> <i class="fa fa-envelope"></i></a> {{customer.customerEmail}}
+                                                      </li>
+                                                      <li>   <a  href="tel:{{customer.customerMobileNo}}"> <i class="fa fa-phone"></i></a> 
+                                                         {{customer.customerMobileNo | mask: '(000) 000-0000'}}</li>
+                                                      <li><i class="fa fa-globe"></i>
+                                                         {{customer.customerAddress}},{{customer.customerCity}}
+                                                         {{customer.customerStateName}} {{customer.customerZipCode}}
+                                                      </li>
+                                                   </ul>
+
+                                                   <p *ngIf="!customer.isOrderForSelf &&  customer.recipientName">
+                                                      <span class="address_icon"><i class="fa fa-user"></i></span>
+                                                      {{customer.recipientName}} <br>
+                                                      <span class="address_icon"><i
+                                                            class="fa fa-envelope"></i></span>
+                                                      {{customer.recipientEmail}}<br>
+                                                      <span class="address_icon"><i class="fa fa-phone"></i> </span>
+                                                      {{customer.recipientMobileNo | mask: '(000) 000-0000'}}<br>
+                                                      <span class="address_icon"><i class="fa fa-globe"></i> </span>
+                                                      {{customer.recipientAddress}},{{customer.recipentCity}}
+                                                      {{customer.recipientStateName}} {{customer.recipientZipCode}}
+                                                   </p>
+                                                </ng-container>
+                                             </div>
+                                             
+                                             <div class="orderTotal">
+                                                <p><b>Order Total :</b> ${{customer.orderTotal | number:'1.2-2'}}</p>
+                                             </div> 
+
+                                             <div class="checkButtons">
+                                                <button [matMenuTriggerFor]="menu"
+                                                   class="btn btn-secondary btn-sm" >
+                                                   <span *ngFor="let status of orderStatusData | orderStatusFilter:customer.orderStatus">{{status.orderStatus}} &nbsp;</span>
+                                                   <i class="fa fa-angle-down"></i>
+                                                   <mat-menu #menu="matMenu">
+                                                      <ng-container  *ngFor="let status of orderStatusData | orderStatusFilterByStatus:customer.orderStatus">
+                                                         <button mat-menu-item (click)="updateOrderStatus(status, customer.orderStatus)">{{status.orderStatus}}</button>
+                                                      </ng-container>                                                       
+                                                   </mat-menu>
+                                                </button>
+                                             </div>                                                     
+                                          </ng-container>
+                                       </div>
+
+                                       <!-- Note accordion -->
+                                       <div class="row">
+                                          <div class="col-md-12"  *ngFor="let customer of orederDetail$|async">
+                                             <mat-accordion [multi]="true">
+                                                <mat-expansion-panel [expanded]="upcOrderModel.selectedOrderSId == 19 || upcOrderModel.selectedOrderSId == 20">
+                                                   <mat-expansion-panel-header>
+                                                      <mat-panel-title>
+                                                         Artist Note
+                                                      </mat-panel-title>                                                  
+                                                   </mat-expansion-panel-header>
+                                                   <p>Lorem Ipsum is simply dummy text of the
+                                                      printing
+                                                      and
+                                                      typesetting industry. Lorem Ipsum has been the industry's standard
+                                                      dummy text ever since the 1500s, when an unknown printer took a
+                                                      galley of type and scrambled it to make a type specimen book.
+                                                   </p>
+                                                </mat-expansion-panel>
+                                             
+                                                <mat-expansion-panel  [expanded]="upcOrderModel.selectedOrderSId == 19 || upcOrderModel.selectedOrderSId == 20">                                            
+                                                   <mat-expansion-panel-header>
+                                                      <mat-panel-title>
+                                                         Card Note
+                                                      </mat-panel-title>                                              
+                                                   </mat-expansion-panel-header>
+                                                   <p>Lorem Ipsum is simply dummy text of the
+                                                      printing
+                                                      and
+                                                      typesetting industry. Lorem Ipsum has been the industry's standard
+                                                      dummy text ever since the 1500s, when an unknown printer took a
+                                                      galley of type and scrambled it to make a type specimen book.
+                                                   </p>
+                                                </mat-expansion-panel>
+
+                                                <mat-expansion-panel  [expanded]="upcOrderModel.selectedOrderSId == 21 || upcOrderModel.selectedOrderSId == 22">
+                                                   <mat-expansion-panel-header>
+                                                      <mat-panel-title> Delievery Note</mat-panel-title>                                                 
+                                                   </mat-expansion-panel-header>
+                                                   <p>Lorem Ipsum is simply dummy text of the
+                                                      printing
+                                                      and
+                                                      typesetting industry. Lorem Ipsum has been the industry's standard
+                                                      dummy text ever since the 1500s, when an unknown printer took a
+                                                      galley of type and scrambled it to make a type specimen book.
+                                                   </p>
+                                                </mat-expansion-panel>
+
+                                             </mat-accordion>
+                                          </div>
+                                       </div>
+                                       <!-- End notes accordion -->
+                                    </div>
+                                 </div>
+
+                              </div>
+                           </div>
+                        </div>
+
+                     </div>
+                  </div>
+               </div>
+            </div>
+
+         </kt-portlet-body>
+      </kt-portlet>
+   </div>
+</div>

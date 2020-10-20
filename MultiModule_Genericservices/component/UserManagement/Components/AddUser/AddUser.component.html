@@ -1,0 +1,252 @@
+<div class="subheader subheader-solid" id="kt_subheader">
+    <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+        <div class="d-flex align-items-center flex-wrap mr-2">          
+            <ul class="breadcrumb font-weight-bold p-0 my-2 font-size-sm">
+                <li class="breadcrumb-item">
+                    Admin
+                </li>
+                <li class="breadcrumb-item">
+                    <a routerLink="/admin/um" class="text-muted">User Management</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a class="text-muted">{{userLabels.title}}</a>
+                </li>
+            </ul>
+        </div>
+        <div class="d-flex align-items-center">
+            <a class="btn btn-outline-primary mr-2" routerLink="admin/um/users" mat-raised-button
+                matTooltip="Back to the users list">
+                <i class="la la-arrow-left"></i>
+                <span class="hidden-mobile">Back</span>
+            </a>
+            <a class="btn btn-outline-primary mr-2" [hidden]="!userLabels.activityBtn" (click)="viewActivity()" mat-raised-button
+                matTooltip="View Activity">
+                <i class="la la-arrow-left"></i>
+                <span class="hidden-mobile">View Activity</span>
+            </a>
+            <a class="btn btn-outline-primary mr-2" (click)="reset()" mat-raised-button
+                matTooltip="Reset changes">
+                <i class="la la-cog"></i>
+                <span class="hidden-mobile">Reset</span>
+            </a>
+            <a class="btn btn-primary mr-2" color="primary" (click)="onSubmit()" mat-raised-button
+                matTooltip="Save & Continue">
+                <span class="hidden-mobile">Save</span>
+            </a>    
+        </div>
+    </div>
+</div>
+<div class="d-flex flex-column-fluid">
+    <div class="container-fluid pad-4">
+        <kt-portlet>          
+            <!-- form body -->
+            <kt-portlet-body>
+
+                <form [formGroup]="userForm" class="form">    
+                    <div class="form-section form-section-first">                       
+                            <div class="basicInfo">
+                                <h4 class="title">Basic Detail</h4>
+                                <mat-card>  
+                                    <div class="row">                                             
+                                        <div class="col-xl-2 col-lg-4 col-md-4">
+                                            <div class="row">
+                                                <app-file-component [data]="['Pro']" [type]="'profile'"></app-file-component>                                                   
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xl-10 col-lg-8 col-md-8">
+                                            <div class="form-group row">
+
+                                            <div class="col-lg-4 col-md-6 kt-margin-bottom-20-mobile">
+                                                <mat-form-field class="mat-form-field-fluid">
+                                                    <mat-label>First Name </mat-label>
+                                                    <input type="text" matInput placeholder="Enter first name"
+                                                        formControlName="firstName" />
+                                                    <mat-error>
+                                                        This is <strong> required</strong>
+                                                    </mat-error>
+    
+                                                </mat-form-field>
+                                            </div>
+    
+    
+                                            <div class="col-lg-4 col-md-6  kt-margin-bottom-20-mobile">
+                                                <mat-form-field class="mat-form-field-fluid">
+                                                    <mat-label>Last Name </mat-label>
+                                                    <input type="text" matInput placeholder="Enter last name"
+                                                        formControlName="lastName" />
+                                                    <mat-error>
+                                                        This is <strong> required</strong>
+                                                    </mat-error>
+                                                </mat-form-field>
+                                            </div>
+
+                                            <div class="col-lg-4 col-md-6 kt-margin-bottom-20-mobile">
+                                                <mat-form-field class="mat-form-field-fluid">
+                                                    <mat-label>Email </mat-label>
+                                                    <input disabled matInput type="email" placeholder="Enter email"  
+                                                        formControlName="email" />
+                                                    <mat-error>
+                                                        This is <strong> required</strong>
+                                                    </mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <ng-container *ngIf="!userLabels.editPassword">
+                                                <div class="col-lg-4 col-md-6  kt-margin-bottom-20-mobile">
+                                                    <mat-form-field class="mat-form-field-fluid">
+                                                        <mat-label>Password </mat-label>
+                                                        <input type="password" matInput placeholder="Enter password"
+                                                            formControlName="password" />
+                                                        <mat-error>
+                                                            This is <strong> required</strong>
+                                                        </mat-error>
+        
+                                                    </mat-form-field>
+                                                </div>
+                                                <div class="col-lg-4 col-md-6  kt-margin-bottom-20-mobile">
+                                                    <mat-form-field class="mat-form-field-fluid">
+                                                        <mat-label>Confirm Password </mat-label>
+                                                        <input type="password" matInput placeholder="Enter confirm password"
+                                                            formControlName="confirmPassword" />
+                                                        <mat-error>
+                                                            This is <strong> required</strong>
+                                                        </mat-error>
+                                                    </mat-form-field>
+                                                </div>
+                                                
+                                            </ng-container>
+                                            
+                                            
+    
+                                            <div class="col-lg-4 col-md-6  kt-margin-bottom-20-mobile">
+                                                <mat-form-field class="mat-form-field-fluid">
+                                                    <mat-label>Date of Birth </mat-label>
+                                                    <input matInput [matDatepicker]="picker" [max]="maxDate"
+                                                        placeholder="Choose date of birth" formControlName="dob" />
+    
+                                                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                                    <mat-datepicker #picker></mat-datepicker>
+    
+                                                    <mat-error>
+                                                        This is <strong> required</strong>
+                                                    </mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <div class="col-md-12 kt-margin-bottom-20-mobile">                                                   
+                                                    <mat-label>Active Status </mat-label>     
+                                                    <mat-slide-toggle formControlName="status"></mat-slide-toggle>                                                 
+                                            </div>
+                                            <div class="col-md-4 kt-margin-bottom-10-mobile toggleStatus">
+                                               
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <div class="col-md-12 kt-margin-bottom-20-mobile">
+                                                <mat-form-field class="mat-form-field-fluid">
+                                                    <mat-label>Note </mat-label>
+                                                    <textarea type="text" matInput placeholder="Enter note" cols="6" rows="6"
+                                                        formControlName="note"></textarea>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>  
+                                </mat-card>
+                            </div>  
+                       
+                            <div class="basicInfo">
+                                <h4 class="title">Settings</h4>
+                                <mat-card>
+                                    <div class="form-group row">
+                                        <div class="col-md-4 kt-margin-bottom-20-mobile">
+                                            <mat-form-field class="mat-form-field-fluid">
+                                                <mat-label>Grid Page </mat-label>
+                                                <mat-select placeholder="Select grid page" formControlName="gridPage">
+                                                    <mat-option [value]="10">10</mat-option>
+                                                    <mat-option [value]="20">20</mat-option>
+                                                    <mat-option [value]="30">30</mat-option>
+                                                </mat-select>
+                                                <mat-error>
+                                                    This is <strong> required</strong>
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+
+                                        <div class="col-md-4 kt-margin-bottom-20-mobile">
+                                            <mat-form-field class="mat-form-field-fluid">
+                                                <mat-label>Default Location </mat-label>
+                                                <mat-select placeholder="Select location"
+                                                    formControlName="defaultLocation" *ngIf="(floristLocations$)">
+                                                    <mat-option *ngFor="let loc of floristLocations$|async" value="{{loc.locationId}}">{{loc.shopName}}</mat-option>                                                 
+                                                </mat-select>
+                                                <mat-error>
+                                                    This is <strong> required</strong>
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+
+                                        <div class="col-md-4 kt-margin-bottom-20-mobile">
+                                            <mat-form-field class="mat-form-field-fluid">
+                                                <mat-label>Home Screen </mat-label>                                                
+                                                <mat-select placeholder="Select home screen" formControlName="homeScreen">
+                                                    <mat-option *ngFor="let h of hsList$|async" [value]="h.screenId">{{h.screenName}} </mat-option>                                                   
+                                                </mat-select>
+                                                <mat-error>
+                                                    This is <strong> required</strong>
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+
+
+                                        <div class="col-lg-12 kt-margin-bottom-20-mobile">
+                                            
+                                            <mat-form-field class="mat-form-field-fluid"  *ngIf="(floristLocations$)">
+                                                <mat-label>Select Location</mat-label>
+                                                <mat-select formControlName="location"  multiple >
+                                                     <mat-option *ngFor="let loc of floristLocations$|async" [value]="loc.locationId">{{loc.shopName}}</mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+
+                                        <div class="col-lg-12 kt-margin-bottom-20-mobile">
+                                            <!-- <app-tag-component formControlName="role" [data]="userRole" [selected]="[]" [ph]="'Select Role'" [lb]="'Role'"></app-tag-component>                                            -->
+                                            <mat-form-field>
+                                                <mat-label>Select Role</mat-label>
+                                            <mat-select formControlName="role"  multiple>
+                                                <mat-option *ngFor="let role of userRole$|async" [value]="role.roleId">{{role.roleName}}</mat-option>
+                                              </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </mat-card>
+                            </div>  
+
+                            <div class="basicInfo">
+                                <!-- <h4 class="title">Add Artist</h4>   -->
+                                <div class="kt-margin-bottom-10-mobile toggleStatus">
+                                    <h4 class="titleInner">Add Artist</h4>
+                                    <mat-slide-toggle formControlName="addArtist"></mat-slide-toggle>
+                                </div>                             
+                                <!-- <mat-slide-toggle formControlName="addArtist"></mat-slide-toggle> -->
+
+                                <mat-card [hidden]="userForm.controls.addArtist.value == false">                                   
+                                    <app-artist-component formControlName="artists"></app-artist-component>
+                                </mat-card>
+                            </div>
+
+                             <!-- Attributes selector -->                        
+                             <div class="basicInfo">                                                                                           
+                                <app-atb-component formControlName="attributes"></app-atb-component>
+                            </div>                                         
+                           <!-- End Attributes selector -->
+                    </div>
+                </form>
+                
+            </kt-portlet-body>
+        </kt-portlet>
+    </div>
+</div>

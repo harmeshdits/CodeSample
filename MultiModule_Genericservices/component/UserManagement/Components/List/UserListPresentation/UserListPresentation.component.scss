@@ -1,0 +1,36 @@
+.mat-column-Email{
+	flex: 0 0 22% !important;
+	width:22% !important;
+	@media (max-width:767px){
+		flex: 0 0 27% !important;
+    	width:27% !important;	
+	}
+  }
+  .mat-column-firstName{
+	flex: 0 0 15% !important;
+	width:15% !important;
+  }
+  .mat-column-lastName{
+	flex: 0 0 15% !important;
+	width:15% !important;
+  }
+  .mat-column-roles{
+	flex: 0 0 18% !important;
+	width:18% !important;
+  }
+  .mat-column-status{
+	flex: 0 0 12% !important;
+	width:12% !important;
+  }
+  .mat-column-action{
+	flex: 0 0 18% !important;
+	width:18% !important;
+  }
+  .mat-form-field {
+    min-width: 235px;
+}
+.no-record{
+	text-align: center;
+	padding-top: 10px;
+	margin: 0 auto;
+}

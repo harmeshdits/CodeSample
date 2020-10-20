@@ -1,0 +1,14 @@
+
+<div class="row" *ngIf="toDoLength>0">   
+    <div class="col-md-2 mb" *ngFor="let card of toDosList|keyvalue|FilterTodos:filterColor">       
+        <mat-card class="pd" [style.backgroundColor]="card.value.color" (click)="editTodo(card.value)">{{card.value.note}}</mat-card>
+    </div>
+
+    
+</div>
+
+<div class="row" *ngIf="toDoLength==0">
+    <div  style="width: 97%;margin: 0 auto;">
+        <h2 style="border: 1px solid #dddd; padding: 20px; text-align: center; margin: 0 auto;">No Todo notes.</h2>
+    </div>
+</div>
